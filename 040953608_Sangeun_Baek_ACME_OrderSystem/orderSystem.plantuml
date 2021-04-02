@@ -1,0 +1,106 @@
+@startuml
+skinparam titleFontColor #0000FF
+title ACME Order System
+
+together {
+    note as note1 #FFFFCC
+      The Java class names follow AAAPojo naming convention
+      Classes extend PojoBase except as indicated
+    end note
+    
+    abstract class PojoBase {
+        +id: int
+        +version: int
+        +created : LocalDateTime 
+        +updated : LocalDateTime
+    }
+}
+
+together {
+  abstract class Address << PojoBase >> {
+    +street: String
+    +city: String
+    +country: String
+    +postal: String
+    +state:String
+  }
+
+  class BillingAddress extends Address {
+    +boolean: isAlsoShipping
+  }
+
+  class ShippingAddress extends Address {
+  }
+}
+
+class Customer << PojBase >> {
+    +firstName: String
+    +lastName: String
+    +email: String
+    +phoneNumber: String
+    ..
+    +shippingAddress: ShippingAddress
+    +billingAddress: BillingAddress
+    ..
+    +List<Order> orders
+}
+note top of Customer
+  Customers <b>must</b> have a Billing Address,
+  but optionally may also have a <i>separate</i>
+  Shipping Address
+end note
+
+Customer --> "1" Address : shippingAddress
+Customer --> "1" Address : billingAddress
+
+together {
+    class Product << PojoBase >> {
+        +description: String 
+        +serialNo: String
+        +stores: Set<Store>
+    }
+    class Store << PojoBase >> {
+        +storeName : String 
+        +products : Set<Product>
+    }
+    
+    Product --> "*" Store : stores
+    Store --> "*" Product : products
+}
+
+together {
+    class OrderLinePk {
+      +int owningOrderId
+      +int orderLineNo
+    }
+    class OrderLine {
+      +pk: OrderLinePk
+       ..
+      +amount: Double
+      +price: Double
+       ..
+      +owningOrder: Order
+       --
+      +product: Product
+    }
+    OrderLinePk -[hidden] OrderLine
+}
+
+class Order << PojoBase >> {
+    +description: String
+    ..
+    +owningCustomer: Customer
+  ..
+    +List<OrderLine> orderLines
+}
+
+Customer *-- "*" Order : +orders
+Order " <i>has a</i> owningCustomer" o-- "1"  Customer
+Order " <i>has many</i> orderLines" *--> "*" OrderLine
+OrderLine " <i>has a</i> owningOrder" -->  Order
+OrderLine " <i>has a</i> product" --> "1" Product
+
+footer
+20F CST 8277 Assignment 3
+endfooter
+@enduml

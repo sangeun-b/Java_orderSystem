@@ -1,0 +1,32 @@
+{
+	"folders": {},
+	"connections": {
+		"h2_server-1757709be40-577f8ac458715e55": {
+			"provider": "generic",
+			"driver": "h2_server",
+			"name": "Order System Bridge",
+			"save-password": true,
+			"show-system-objects": true,
+			"read-only": false,
+			"configuration": {
+				"host": "localhost",
+				"port": "54321",
+				"database": "mem:assignment3",
+				"url": "jdbc:h2:tcp://localhost:54321/mem:assignment3",
+				"type": "dev",
+				"auth-model": "native",
+				"handlers": {}
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false
+		}
+	}
+}
